@@ -9,31 +9,31 @@ const menuOpt = [
     choices: [
       {
         value: "1",
-        name: `${"1.".green} Crear tarea`,
+        name: `${"1.".yellow} Crear tarea`,
       },
       {
         value: "2",
-        name: `${"2.".green} Listar tareas`,
+        name: `${"2.".yellow} Listar tareas`,
       },
       {
         value: "3",
-        name: `${"3.".green} Listar tareas completadas`,
+        name: `${"3.".yellow} Listar tareas completadas`,
       },
       {
         value: "4",
-        name: `${"4.".green} Listar tareas pendientes`,
+        name: `${"4.".yellow} Listar tareas pendientes`,
       },
       {
         value: "5",
-        name: `${"5.".green} Completar tarea(s)`,
+        name: `${"5.".yellow} Completar tarea(s)`,
       },
       {
         value: "6",
-        name: `${"6.".green} Borrar tarea`,
+        name: `${"6.".yellow} Borrar tarea`,
       },
       {
         value: "0",
-        name: `${"0.".green} Salir`,
+        name: `${"0.".yellow} Salir`,
       },
     ],
   },
@@ -79,8 +79,31 @@ const leerInput = async (message) => {
   return desc;
 };
 
+const listadoTareasBorrar = async (tareas = []) => {
+  const choices = tareas.map((tarea, i) => {
+    const idx = `${i + 1}.`.green;
+    return {
+      value: tarea.id,
+      name: `${idx} ${tarea.desc}`,
+    };
+  });
+
+  const preguntas = [
+    {
+      type: "list",
+      name: "id",
+      message: "Borrar",
+      choices,
+    },
+  ];
+
+  const { id } = await inquirer.prompt(preguntas);
+  return id;
+};
+
 module.exports = {
   inquirerMenu,
   pausa,
-  leerInput
+  leerInput,
+  listadoTareasBorrar,
 };
