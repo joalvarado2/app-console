@@ -1,4 +1,5 @@
 const inquirer = require("inquirer");
+const Tarea = require("../models/tarea");
 require("colors");
 
 const menuOpt = [
@@ -88,6 +89,11 @@ const listadoTareasBorrar = async (tareas = []) => {
     };
   });
 
+  choices.unshift({
+    value: "0",
+    name: "0.".green + " cancelar",
+  });
+
   const preguntas = [
     {
       type: "list",
@@ -101,9 +107,45 @@ const listadoTareasBorrar = async (tareas = []) => {
   return id;
 };
 
+const confirmar = async (message) => {
+  const preguntas = [
+    {
+      type: "confirm",
+      name: "ok",
+      message,
+    },
+  ];
+  const { ok } = await inquirer.prompt(preguntas);
+  return ok;
+};
+
+const listadoMostrarChecklist = async (tareas = []) => {
+  const choices = tareas.map((tarea, i) => {
+    const idx = `${i + 1}.`.green;
+    return {
+      value: tarea.id,
+      name: `${idx} ${tarea.desc}`,
+      checked: (tarea.completadoEn) ? true : false,
+    };
+  });
+
+  const preguntas = [
+    {
+      type: "checkbox",
+      name: "ids",
+      message: "Seleccione",
+      choices,
+    },
+  ];
+  const { ids } = await inquirer.prompt(preguntas);
+  return ids;
+};
+
 module.exports = {
   inquirerMenu,
   pausa,
   leerInput,
   listadoTareasBorrar,
+  confirmar,
+  listadoMostrarChecklist
 };
